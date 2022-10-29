@@ -13,6 +13,7 @@ struct CheckoutView: View {
 
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
+    @State private var showingOrderFailed = false
 
     var body: some View {
         ScrollView {
@@ -47,6 +48,11 @@ struct CheckoutView: View {
         } message: {
             Text(confirmationMessage)
         }
+        .alert("Sorry", isPresented: $showingOrderFailed) {
+            Button("OK") { }
+        } message: {
+            Text("Unable to post order - check your internet connection and retry")
+        }
     }
 
 
@@ -66,7 +72,7 @@ struct CheckoutView: View {
             confirmationMessage = "Your order for \(decodedOrder.quantity)x \(Order.types[decodedOrder.type].lowercased()) cupcakes is on its way!"
             showingConfirmation = true
         } catch {
-            print("Checkout failed.")
+            showingOrderFailed = true
         }
     }
 
